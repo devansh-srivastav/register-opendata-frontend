@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+/*import Footer from '../components/footer'*/
+
 
 export default function Home() {
   return (
@@ -12,58 +14,28 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+              <div className="container">
+                  <div className="full-w" >
+                      <h2>Registrieren und
+                      Datenbereitsteller:in werden
+                          </h2>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+                      <br />
+                      <h4>Um ein Datenbereitsteller-Konto zu erstellen benötigen wir ein paar Angaben über Sie und Ihre Organisation. Nach einer Überprüfung (1 bis 3 Werktagen) durch unsere Kolleg:innen erhalten Sie eine Freischaltung per E-Mail.</h4>
+                      <h3>
+                          Datenbereitsteller:in
+                    </h3>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+                      <h4>
+                      Als Datenbereitsteller sind Sie die Person, die die Daten in das Portal hochlädt und  Fragen zu den bereitgestellten Daten beantwortet oder diese zur zuständigen Person weiterleitet. Ihre persönlichen Daten werden zu keinem Zeitpunkt öffentlich sichtbar sein. 
+                      </h4>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+                  </div>
+              </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+    {/*  <Footer/>*/}
     </div>
   )
 }
