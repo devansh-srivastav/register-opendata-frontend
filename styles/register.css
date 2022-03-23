@@ -1,0 +1,125 @@
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (min-width: 768px){
+    .container {
+        width: 750px;
+    }
+}
+
+
+.register-form-container h4{
+    font-weight:normal;
+}
+
+
+.register-form-container{
+    max-width:600px;
+    margin:auto;
+ }
+
+ textarea {
+    max-width: 100%;
+    width: 100%;
+    min-width: 100%;
+    
+}
+
+.center-container{
+    width:450px;
+    text-align: left;
+    margin:auto;
+    margin-top:100px;
+}
+
+.center-container h4{
+    font-weight: normal;
+}
+
+.center-container a{
+    color:#087CE2;
+    text-decoration: underline;
+}
+
+.df{
+    align-items: center;
+    display: flex;
+}
+
+.df svg{
+    margin-left:5px;
+}
+
+.reg-details{
+    padding-right:25px;
+}
+
+.login-form input,textarea.form-control{
+    width:calc(100% - 25px);
+    max-width:calc(100% - 25px);
+    min-width:calc(100% - 25px);
+}
+
+.__react_component_tooltip{
+width: 207px;
+
+font-family: 'Manrope';
+font-style: normal;
+font-weight: 800;
+font-size: 13px;
+line-height: 150%;
+/* or 20px */
+
+background: #FFFFFF;
+box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.12);
+border-radius: 4px;
+
+color: #000000;
+padding:14px;
+}
+
+.blue-btn{
+    padding: 8px 16px;
+
+    background: #0E0060;
+     border-radius: 50px;
+     color:white;
+     border:none; 
+}
+.inactive-btn{
+opacity: 0.4;
+}
+
+.active-btn{
+    opacity: 1; 
+}
+ 
+ @media(max-width:768px)
+ {
+    .register-form-container{
+        max-width:500px;
+        margin:auto;
+    }
+ }

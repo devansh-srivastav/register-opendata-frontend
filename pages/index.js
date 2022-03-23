@@ -1,10 +1,55 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-/*import Footer from '../components/footer'*/
-
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import axios from "axios";
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Question from '../public/que.svg';
+import ReactTooltip from 'react-tooltip';
 
 export default function Home() {
+
+  const apiUrl = "https://registerbackend.opendatabayern.de/api/";
+    //const apiUrl = "http://localhost:3100/api/";
+
+    const [query, setQuery] = useState({
+        comment: "",
+        date: new Date(),
+        email: "",
+        name:"",
+        surname:"",
+        phone:"",
+        org:"",
+        desc:"",
+        position:""
+
+    }); 
+ 
+    
+    const [change, setChange] = useState(false);
+    const [valid, setValid] = useState(false);
+    const handleChange = () => (e) => {
+      const name = e.target.name;
+      const value = e.target.value;
+      setQuery((prevState) => ({
+          ...prevState,
+          [name]: value
+      }));
+      setChange(true);
+      if(query.comment!=null && query.date!=null && query.email!=null && query.name!=null && query.surname!=null && query.phone!=null && query.org!=null && query.position!=null)
+         setValid(true)
+      else
+         setValid(false)
+  };
+
+
+
+
+
+
+
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,28 +59,195 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-              <div className="container">
-                  <div className="full-w" >
-                      <h2>Registrieren und
-                      Datenbereitsteller:in werden
-                          </h2>
+        <div className="container">
+          <div className="register-form-container">
+            <div className="reg-details">
+            <h2>Registrieren und Datenbereitsteller:in werden</h2>
+          
+            <h4>
+            Um ein Datenbereitsteller-Konto zu erstellen benötigen wir ein paar Angaben über Sie und Ihre Organisation. Nach einer Überprüfung (1 bis 3 Werktagen) durch unsere Kolleg:innen erhalten Sie eine Freischaltung per E-Mail.
+            </h4>
 
-                      <br />
-                      <h4>Um ein Datenbereitsteller-Konto zu erstellen benötigen wir ein paar Angaben über Sie und Ihre Organisation. Nach einer Überprüfung (1 bis 3 Werktagen) durch unsere Kolleg:innen erhalten Sie eine Freischaltung per E-Mail.</h4>
-                      <h3>
-                          Datenbereitsteller:in
-                    </h3>
+            <h3>Datenbereitsteller:in</h3>
 
-                      <h4>
-                      Als Datenbereitsteller sind Sie die Person, die die Daten in das Portal hochlädt und  Fragen zu den bereitgestellten Daten beantwortet oder diese zur zuständigen Person weiterleitet. Ihre persönlichen Daten werden zu keinem Zeitpunkt öffentlich sichtbar sein. 
-                      </h4>
-
-
-                  </div>
+            <h4>
+             Als Datenbereitsteller sind Sie die Person, die die Daten in das Portal hochlädt und  Fragen zu den bereitgestellten Daten beantwortet oder diese zur zuständigen Person weiterleitet. Ihre persönlichen Daten werden zu keinem Zeitpunkt öffentlich sichtbar sein. 
+            </h4>
+            </div>
+            <form method="post" className="dataset-form login-form">
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Name
+                </label>
+                <div class="controls ">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="name"
+                    value={query.name}
+                    placeholder="z.B. Mustermann"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                 
+                </div>
               </div>
-      </main>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Vorname
+                </label>
+                <div class="controls ">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="surname"
+                    placeholder="z.B. Maria"
+                    value={query.surname}
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                </div>
+              </div>
+              <ReactTooltip id="t1" place="right" effect="solid">Idealerweise verwenden Sie hier Ihre Arbeitsmail anstatt eines Funktionspostfachs.</ReactTooltip>
+              <ReactTooltip id="t2" place="right" effect="solid">Ihre Telefonnummer dient dazu Sie bei Rückfragen erreichen zu können.</ReactTooltip>
+              <ReactTooltip id="t3" place="right" effect="solid">Die von Ihnen bereitgestellten Daten werden unter dem Namen Ihrer Organisation veröffentlicht.</ReactTooltip>
+              <ReactTooltip id="t4" place="right" effect="solid">Empfohlene Struktur:
+              <ul>
+                <li>Das Mission Statement der Organisation</li>
+                <li>Angebotene Dienstleistungen</li>
+                <li>Welche Art von Daten kann Ihre Organisation bereitstellen?</li>
+                <li>Wer könnte der potenzielle Nutzer sein?</li>
+              </ul>
+              </ReactTooltip>
 
-    {/*  <Footer/>*/}
+              <div class="form-group control-medium">
+                <label class="control-label " for="field-login">
+                Arbeitsmail
+                </label>
+                <div class="controls df">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="email"
+                    value={query.email}
+                    placeholder="z.B. maria.mustermann@opendatabayern.de"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                  <svg data-tip data-for="t1" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.0003 1.66797C5.39616 1.66797 1.66699 5.39714 1.66699 10.0013C1.66699 14.6055 5.39616 18.3346 10.0003 18.3346C14.6045 18.3346 18.3337 14.6055 18.3337 10.0013C18.3337 5.39714 14.6045 1.66797 10.0003 1.66797ZM10.8337 15.8346H9.16699V14.168H10.8337V15.8346ZM12.5545 9.38047L11.8087 10.1471C11.2087 10.7471 10.8337 11.2513 10.8337 12.5013H9.16699V12.0846C9.16699 11.1638 9.54199 10.3305 10.142 9.7263L11.1795 8.6763C11.4795 8.3763 11.667 7.95964 11.667 7.5013C11.667 6.58047 10.9212 5.83464 10.0003 5.83464C9.07949 5.83464 8.33366 6.58047 8.33366 7.5013H6.66699C6.66699 5.65964 8.15866 4.16797 10.0003 4.16797C11.842 4.16797 13.3337 5.65964 13.3337 7.5013C13.3337 8.23464 13.0378 8.89714 12.5545 9.38047Z" fill="#131313"/>
+
+</svg>
+                </div>
+              </div>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Telefon
+                </label>
+                <div class="controls df">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="phone"
+                    value={query.phone}
+                    placeholder="z.B. 0111 3330-0"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                   <svg  data-tip data-for="t2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.0003 1.66797C5.39616 1.66797 1.66699 5.39714 1.66699 10.0013C1.66699 14.6055 5.39616 18.3346 10.0003 18.3346C14.6045 18.3346 18.3337 14.6055 18.3337 10.0013C18.3337 5.39714 14.6045 1.66797 10.0003 1.66797ZM10.8337 15.8346H9.16699V14.168H10.8337V15.8346ZM12.5545 9.38047L11.8087 10.1471C11.2087 10.7471 10.8337 11.2513 10.8337 12.5013H9.16699V12.0846C9.16699 11.1638 9.54199 10.3305 10.142 9.7263L11.1795 8.6763C11.4795 8.3763 11.667 7.95964 11.667 7.5013C11.667 6.58047 10.9212 5.83464 10.0003 5.83464C9.07949 5.83464 8.33366 6.58047 8.33366 7.5013H6.66699C6.66699 5.65964 8.15866 4.16797 10.0003 4.16797C11.842 4.16797 13.3337 5.65964 13.3337 7.5013C13.3337 8.23464 13.0378 8.89714 12.5545 9.38047Z" fill="#131313"/>
+</svg>
+                </div>
+              </div>
+              <br/>
+              <h3>
+Über Ihre Organisation</h3>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Organisation
+                </label>
+                <div class="controls df">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="org"
+                    value={query.org}
+                    placeholder="z.B. Open Data Bayern oder Stadt München"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                   <svg  data-tip data-for="t3"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.0003 1.66797C5.39616 1.66797 1.66699 5.39714 1.66699 10.0013C1.66699 14.6055 5.39616 18.3346 10.0003 18.3346C14.6045 18.3346 18.3337 14.6055 18.3337 10.0013C18.3337 5.39714 14.6045 1.66797 10.0003 1.66797ZM10.8337 15.8346H9.16699V14.168H10.8337V15.8346ZM12.5545 9.38047L11.8087 10.1471C11.2087 10.7471 10.8337 11.2513 10.8337 12.5013H9.16699V12.0846C9.16699 11.1638 9.54199 10.3305 10.142 9.7263L11.1795 8.6763C11.4795 8.3763 11.667 7.95964 11.667 7.5013C11.667 6.58047 10.9212 5.83464 10.0003 5.83464C9.07949 5.83464 8.33366 6.58047 8.33366 7.5013H6.66699C6.66699 5.65964 8.15866 4.16797 10.0003 4.16797C11.842 4.16797 13.3337 5.65964 13.3337 7.5013C13.3337 8.23464 13.0378 8.89714 12.5545 9.38047Z" fill="#131313"/>
+</svg>
+                </div>
+              </div>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Webseite
+                </label>
+                <div class="controls
+                ">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="website"
+                    value={query.website}
+                    placeholder="z.B. https://www.opendatabayern.de"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                </div>
+              </div>
+
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Beschreibung
+                </label>
+                <div class="controls  df">
+                <textarea rows="5" type="text" value="" name="desc" placeholder="Bitte stellen Sie Ihre Organisation in maximal 150 Wörter vor." 
+                    class="form-control" 
+                    onChange={handleChange()} 
+                    id="field-login"/>
+                    <svg  data-tip data-for="t4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.0003 1.66797C5.39616 1.66797 1.66699 5.39714 1.66699 10.0013C1.66699 14.6055 5.39616 18.3346 10.0003 18.3346C14.6045 18.3346 18.3337 14.6055 18.3337 10.0013C18.3337 5.39714 14.6045 1.66797 10.0003 1.66797ZM10.8337 15.8346H9.16699V14.168H10.8337V15.8346ZM12.5545 9.38047L11.8087 10.1471C11.2087 10.7471 10.8337 11.2513 10.8337 12.5013H9.16699V12.0846C9.16699 11.1638 9.54199 10.3305 10.142 9.7263L11.1795 8.6763C11.4795 8.3763 11.667 7.95964 11.667 7.5013C11.667 6.58047 10.9212 5.83464 10.0003 5.83464C9.07949 5.83464 8.33366 6.58047 8.33366 7.5013H6.66699C6.66699 5.65964 8.15866 4.16797 10.0003 4.16797C11.842 4.16797 13.3337 5.65964 13.3337 7.5013C13.3337 8.23464 13.0378 8.89714 12.5545 9.38047Z" fill="#131313"/>
+</svg>      
+                </div>
+              </div>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Ihre Position
+                </label>
+                <div class="controls ">
+                  <input
+                    id="field-login"
+                    type="text"
+                    name="position"
+                    value={query.position}
+                    placeholder="z.B. Smart City Managerin"
+                    class="form-control"
+                    onChange={handleChange()} 
+                  />
+                </div>
+              </div>
+              <br/>
+              <br/>
+              <div class="form-group control-medium">
+                <label class="control-label" for="field-login">
+                Hinterlassen Sie uns Eine Nachricht
+                </label>
+                <div class="controls ">
+                  
+                  <textarea rows="5" type="text" value={query.comment} name="comment" placeholder="Ihre Nachricht (optional)" 
+                    class="form-control" 
+                    onChange={handleChange()} 
+                    id="field-login"/>     
+                </div>
+              </div>
+              <button class={!valid?"blue-btn inactive-btn":"blue-btn active-btn"}  disabled={valid?false:true}>Registrieren</button>
+            </form>
+          </div>
+        </div>
+      </main>
     </div>
-  )
+  );
 }
