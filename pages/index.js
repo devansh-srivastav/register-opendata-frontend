@@ -9,19 +9,21 @@ import ReactTooltip from 'react-tooltip';
 
 export default function Home() {
 
-  const apiUrl = "https://registerbackend.opendatabayern.de/api/";
-    //const apiUrl = "http://localhost:3100/api/";
+  //const apiUrl = "https://registerbackend.opendatabayern.de/api/";
+    const apiUrl = "http://localhost:3100/api/";
+    const router=useRouter();
 
     const [query, setQuery] = useState({
         comment: "",
-        date: new Date(),
         email: "",
         name:"",
         surname:"",
         phone:"",
         org:"",
         desc:"",
-        position:""
+        position: "",
+        website:"",
+        org_title:""
 
     }); 
  
@@ -35,18 +37,39 @@ export default function Home() {
           ...prevState,
           [name]: value
       }));
+      if(name=='org_title')
+      {
+        let new_value=value;
+        new_value=new_value.replaceAll(" ","")
+        new_value=new_value.toLowerCase();
+        setQuery((prevState) => ({
+        ...prevState,
+        'org': new_value
+    }));
+  }
+
       setChange(true);
-      if(query.comment!=null && query.date!=null && query.email!=null && query.name!=null && query.surname!=null && query.phone!=null && query.org!=null && query.position!=null)
+      if( query.date!="" && query.email!="" && query.name!="" && query.surname!="" && query.phone!="" && query.org_title!="" && query.position!="" && query.website!="" )
          setValid(true)
       else
          setValid(false)
-  };
+    };
 
 
+    const submit = async () => {
+       
+            const configs = { headers: { 'Content-Type': 'application/json' } };
+            
+            let res = axios.post(apiUrl + "register",query,configs).
+                then((res) => {
+                    router.push("/success")
+                   
+                }).catch((err) => {
+                    alert(err)
+                })
 
-
-
-
+        return true;
+   }
 
 
 
@@ -75,35 +98,35 @@ export default function Home() {
             </h4>
             </div>
             <form method="post" className="dataset-form login-form">
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Name
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   <input
                     id="field-login"
                     type="text"
                     name="name"
                     value={query.name}
                     placeholder="z.B. Mustermann"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                  
                 </div>
               </div>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Vorname
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   <input
                     id="field-login"
                     type="text"
                     name="surname"
                     placeholder="z.B. Maria"
                     value={query.surname}
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                 </div>
@@ -120,18 +143,18 @@ export default function Home() {
               </ul>
               </ReactTooltip>
 
-              <div class="form-group control-medium">
-                <label class="control-label " for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label " for="field-login">
                 Arbeitsmail
                 </label>
-                <div class="controls df">
+                <div className="controls df">
                   <input
                     id="field-login"
                     type="text"
                     name="email"
                     value={query.email}
                     placeholder="z.B. maria.mustermann@opendatabayern.de"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                   <svg data-tip data-for="t1" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -140,18 +163,18 @@ export default function Home() {
 </svg>
                 </div>
               </div>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Telefon
                 </label>
-                <div class="controls df">
+                <div className="controls df">
                   <input
                     id="field-login"
                     type="text"
                     name="phone"
                     value={query.phone}
                     placeholder="z.B. 0111 3330-0"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                    <svg  data-tip data-for="t2" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -162,18 +185,18 @@ export default function Home() {
               <br/>
               <h3>
 Über Ihre Organisation</h3>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Organisation
                 </label>
-                <div class="controls df">
+                <div className="controls df">
                   <input
                     id="field-login"
                     type="text"
-                    name="org"
-                    value={query.org}
+                    name="org_title"
+                    value={query.org_title}
                     placeholder="z.B. Open Data Bayern oder Stadt München"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                    <svg  data-tip data-for="t3"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -181,11 +204,11 @@ export default function Home() {
 </svg>
                 </div>
               </div>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Webseite
                 </label>
-                <div class="controls
+                <div className="controls
                 ">
                   <input
                     id="field-login"
@@ -193,57 +216,58 @@ export default function Home() {
                     name="website"
                     value={query.website}
                     placeholder="z.B. https://www.opendatabayern.de"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                 </div>
               </div>
 
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Beschreibung
                 </label>
-                <div class="controls  df">
-                <textarea rows="5" type="text" value="" name="desc" placeholder="Bitte stellen Sie Ihre Organisation in maximal 150 Wörter vor." 
-                    class="form-control" 
-                    onChange={handleChange()} 
+                <div className="controls  df">
+                <textarea rows="5" type="text"  name="desc" placeholder="Bitte stellen Sie Ihre Organisation in maximal 150 Wörter vor." 
+                    className="form-control" 
+                    onChange={handleChange()}
+                    value={query.desc}
                     id="field-login"/>
                     <svg  data-tip data-for="t4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M10.0003 1.66797C5.39616 1.66797 1.66699 5.39714 1.66699 10.0013C1.66699 14.6055 5.39616 18.3346 10.0003 18.3346C14.6045 18.3346 18.3337 14.6055 18.3337 10.0013C18.3337 5.39714 14.6045 1.66797 10.0003 1.66797ZM10.8337 15.8346H9.16699V14.168H10.8337V15.8346ZM12.5545 9.38047L11.8087 10.1471C11.2087 10.7471 10.8337 11.2513 10.8337 12.5013H9.16699V12.0846C9.16699 11.1638 9.54199 10.3305 10.142 9.7263L11.1795 8.6763C11.4795 8.3763 11.667 7.95964 11.667 7.5013C11.667 6.58047 10.9212 5.83464 10.0003 5.83464C9.07949 5.83464 8.33366 6.58047 8.33366 7.5013H6.66699C6.66699 5.65964 8.15866 4.16797 10.0003 4.16797C11.842 4.16797 13.3337 5.65964 13.3337 7.5013C13.3337 8.23464 13.0378 8.89714 12.5545 9.38047Z" fill="#131313"/>
 </svg>      
                 </div>
               </div>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Ihre Position
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   <input
                     id="field-login"
                     type="text"
                     name="position"
                     value={query.position}
                     placeholder="z.B. Smart City Managerin"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                 </div>
               </div>
               <br/>
               <br/>
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Hinterlassen Sie uns Eine Nachricht
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   
                   <textarea rows="5" type="text" value={query.comment} name="comment" placeholder="Ihre Nachricht (optional)" 
-                    class="form-control" 
+                    className="form-control" 
                     onChange={handleChange()} 
                     id="field-login"/>     
                 </div>
               </div>
-              <button class={!valid?"blue-btn inactive-btn":"blue-btn active-btn"}  disabled={valid?false:true}>Registrieren</button>
+                          <button type="button" className={!valid ? "blue-btn inactive-btn" : "blue-btn active-btn"} disabled={valid ? false : true} onClick={() => submit()}>Registrieren</button>
             </form>
           </div>
         </div>

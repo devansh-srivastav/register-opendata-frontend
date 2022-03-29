@@ -2,23 +2,66 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react'
+import { useRouter,pathname} from 'next/router';
 import Question from '../public/que.svg';
 import ReactTooltip from 'react-tooltip';
 
-export default function Home() {
 
-  const apiUrl = "https://registerbackend.opendatabayern.de/api/";
-    //const apiUrl = "http://localhost:3100/api/";
+export default function Home() {
+let router=useRouter()
+
+//const apiUrl = "https://registerbackend.opendatabayern.de/api/";
+const apiUrl = "http://localhost:3100/api/";
+const ckanUrl = " http://opendatabayern.de/api/3/action/";
+//http://opendatabayern.de/api/3/action/organization_list
+const apikey="e6cf1719-b1e4-47ec-aa33-a797bdd43858";    
+const header = {
+  'Authorization': apikey,
+  'Content-Type': 'application/json',
+};
+
+let categories=['andere',
+                'bevolkerung-und-gesellschaft',
+                'bildung-kultur-und-sport',
+                'energie',
+                'internationale-themen',
+                'justiz-rechtssystem-und-offentliche-sicherheit',
+                'landwirtschaft-fischerei-forstwirtschaft-und-nahrungsmittel',
+                'gesundheit',
+                'regionen-und-stadte',
+                'umwelt',
+                'verkehr',
+                'regierung-und-offentlicher-sektor',
+                'wissenschaft-und-technologie',
+                'wirtschaft-und-finanzen'
+
+              ]
 
     const [query, setQuery] = useState({
         email:"",
-        userName:"",
+        username:"",
         password:"",
         confirmPass:""
     }); 
- 
+    useEffect(()=>{
+      setQuery((prevState) => ({
+        ...prevState,
+        'username': router.query.username
+    }));
+   
+    },[router.query]);
+
+    useEffect(()=>{
+     
+        if(query.password!="" && query.password==query.confirmPass && query.password.length>=4)
+        setValid(true)
+     else if(query.password!="" && query.confirmPass!="" &&( query.password!=query.confirmPass ))
+      {
+          setValid(false)
+      }  
+   
+    },[query.confirmPass]);
     
     const [change, setChange] = useState(false);
     const [valid, setValid] = useState(false);
@@ -30,12 +73,100 @@ export default function Home() {
           [name]: value
       }));
       setChange(true);
-      if(query.password!=null && query.password==query.confirmPass)
-         setValid(true)
-      else
-         setValid(false)
+     
+      
+      
   };
 
+  const submit = async () => {
+       
+    const configs = { headers: { 'Content-Type': 'application/json' } };
+    
+    let res = axios.post(apiUrl + "createUser",query,configs).
+        then(async (res) => {
+
+          
+         await RegistrationOnPlatform(query,res.data.result).then(async (result)=>{
+          await addToOrg(query,res.data.result).then(async (result)=>{   
+           await addToCate(query,res.data.result,0).then(async (result)=>{
+              console.log(result);
+            }).catch(err=>{
+              console.log(err);
+            })
+           
+          }).catch(err=>{
+             console.log(err);
+          })
+        }).catch(err=>{
+          console.log(err);
+       })
+        }).catch(err=>{
+
+        })
+
+  }
+
+
+const RegistrationOnPlatform=async (body,result)=>
+{
+  let fullname=result.name+" "+result.surname;
+    let data={
+        "name":body.username,
+        "email":result.email,
+        "password":body.password,
+        "fullname":fullname,
+        "about":result.desc
+    }
+   await axios.post( ckanUrl+"user_create",data,{headers:header}).then(res=>{
+        console.log(res);
+        return res;
+    }).catch(err=>{
+        console.log(err)
+        return err
+    })
+     
+}
+
+
+const addToOrg=async (body,result)=>
+{
+  let fullname=result.name+" "+result.surname;
+    let data={
+        "username":body.username,
+        "id":result.org,
+        "role":"editor"
+    }
+   await axios.post( ckanUrl+"organization_member_create",data,{headers:header}).then(res=>{
+        console.log(res);
+        return res;
+    }).catch(err=>{
+        console.log(err)
+        return err
+    })
+     
+}
+
+const addToCate=async(body,result,id)=>{
+
+  for(let i=0;i<14;i++)
+  {
+    let data={
+    'id':categories[i],
+    'object':body.username,
+    'object_type':'user',
+    'capacity':'editor'
+    }
+    console.log(data)
+   await axios.post(ckanUrl+"member_create",data,{headers:header}).then(res=>{
+      console.log(res);
+     }).catch(err=>{
+      console.log(err)
+      return err
+  })
+    id++;
+  }
+  return true; 
+}
 
   return (
     <div className={styles.container}>
@@ -52,7 +183,7 @@ export default function Home() {
             <h2>Registrierung abschließen</h2>
             <br/>
             <h4>
-            Ihr Username lautet {query.userName}
+            Ihr Username lautet {query.username}
             </h4>
             <br/>
            <h4>
@@ -60,42 +191,42 @@ export default function Home() {
            </h4>
             </div>
             <form method="post" className="dataset-form login-form">
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Password
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   <input
                     id="field-login"
                     type="password"
                     name="password"
                     value={query.password}
                     placeholder="************"
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                  
                 </div>
               </div>
 
-              <div class="form-group control-medium">
-                <label class="control-label" for="field-login">
+              <div className="form-group control-medium">
+                <label className="control-label" for="field-login">
                 Confirm Password
                 </label>
-                <div class="controls ">
+                <div className="controls ">
                   <input
                     id="field-login"
                     type="password"
                     name="confirmPass"
                     placeholder="************"
                     value={query.confirmPass}
-                    class="form-control"
+                    className="form-control"
                     onChange={handleChange()} 
                   />
                 </div>
               </div>
               
-              <button class={!valid?"blue-btn inactive-btn":"blue-btn active-btn"}  disabled={valid?false:true}>Passwort erstellen</button>
+              <button class={!valid?"blue-btn inactive-btn":"blue-btn active-btn"} type="button" onClick={()=>submit()} disabled={valid?false:true}>Passwort erstellen</button>
             </form>
           </div>
         </div>
