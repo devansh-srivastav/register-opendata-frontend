@@ -6,20 +6,22 @@ import React, { useState, useEffect } from 'react'
 import { useRouter,pathname} from 'next/router';
 import Question from '../public/que.svg';
 import ReactTooltip from 'react-tooltip';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 
 export default function Home() {
 let router=useRouter()
 
-//const apiUrl = "https://registerbackend.opendatabayern.de/api/";
-const apiUrl = "http://localhost:3100/api/";
+const apiUrl = "https://registerbackend.opendatabayern.de/api/";
+//const apiUrl = "http://localhost:3100/api/";
 const ckanUrl = " http://opendatabayern.de/api/3/action/";
-//http://opendatabayern.de/api/3/action/organization_list
-const apikey="e6cf1719-b1e4-47ec-aa33-a797bdd43858";    
+const apikey = "e6cf1719-b1e4-47ec-aa33-a797bdd43858";
+    
 const header = {
   'Authorization': apikey,
   'Content-Type': 'application/json',
 };
+const [loading, setLoad] = useState(false);
 
 let categories=['andere',
                 'bevolkerung-und-gesellschaft',
@@ -49,19 +51,24 @@ let categories=['andere',
         ...prevState,
         'username': router.query.username
     }));
-   
+        if(query.username=="")NotificationManager.info('Password should be atleast 8 character long!', 'info');
     },[router.query]);
 
     useEffect(()=>{
      
-        if(query.password!="" && query.password==query.confirmPass && query.password.length>=4)
+        if(query.password!="" && query.password==query.confirmPass && query.password.length>=8)
         setValid(true)
      else if(query.password!="" && query.confirmPass!="" &&( query.password!=query.confirmPass ))
       {
           setValid(false)
       }  
+      else if(query.password!="" && query.confirmPass!="" && query.password==query.confirmPass && query.password.length<8)
+        {
+          setValid(false);
+           NotificationManager.info('Password should be atleast 8 character long!', 'info');
+        }
    
-    },[query.confirmPass]);
+    },[query]);
     
     const [change, setChange] = useState(false);
     const [valid, setValid] = useState(false);
@@ -74,8 +81,6 @@ let categories=['andere',
       }));
       setChange(true);
      
-      
-      
   };
 
   const submit = async () => {
@@ -85,23 +90,29 @@ let categories=['andere',
     let res = axios.post(apiUrl + "createUser",query,configs).
         then(async (res) => {
 
-          
+         setLoad(true)
          await RegistrationOnPlatform(query,res.data.result).then(async (result)=>{
           await addToOrg(query,res.data.result).then(async (result)=>{   
            await addToCate(query,res.data.result,0).then(async (result)=>{
-              console.log(result);
+               setLoad(false)
+                NotificationManager.success('You can now login', 'Success');
+                router.push('http://opendatabayern.de/user/login');
             }).catch(err=>{
-              console.log(err);
+              setLoad(false)
+              NotificationManager.error('Something went wrong! Please try again!', 'Error');
             })
            
           }).catch(err=>{
-             console.log(err);
+            setLoad(false)
+            NotificationManager.error('Something went wrong! Please try again!', 'Error');
           })
         }).catch(err=>{
-          console.log(err);
+          setLoad(false)
+          NotificationManager.error('Something went wrong! Please try again!', 'Error');
        })
         }).catch(err=>{
-
+          setLoad(false)
+          NotificationManager.error('Something went wrong! Please try again!', 'Error');
         })
 
   }
@@ -118,10 +129,8 @@ const RegistrationOnPlatform=async (body,result)=>
         "about":result.desc
     }
    await axios.post( ckanUrl+"user_create",data,{headers:header}).then(res=>{
-        console.log(res);
         return res;
     }).catch(err=>{
-        console.log(err)
         return err
     })
      
@@ -137,10 +146,8 @@ const addToOrg=async (body,result)=>
         "role":"editor"
     }
    await axios.post( ckanUrl+"organization_member_create",data,{headers:header}).then(res=>{
-        console.log(res);
         return res;
     }).catch(err=>{
-        console.log(err)
         return err
     })
      
@@ -156,11 +163,10 @@ const addToCate=async(body,result,id)=>{
     'object_type':'user',
     'capacity':'editor'
     }
-    console.log(data)
+   
    await axios.post(ckanUrl+"member_create",data,{headers:header}).then(res=>{
-      console.log(res);
+      return res;
      }).catch(err=>{
-      console.log(err)
       return err
   })
     id++;
@@ -177,7 +183,10 @@ const addToCate=async(body,result,id)=>{
       </Head>
 
       <main >
+       
         <div className="container center-container">
+        <div className="login-loader" style={loading ? { opacity: 1 } : { opacity: 0 }}> <Image src="/loader.gif" width="35" height="35" alt="" /></div>
+
           <div className="register-form-container">
             <div className="reg-details">
             <h2>Registrierung abschließen</h2>

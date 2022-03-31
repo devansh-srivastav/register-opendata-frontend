@@ -13461,7 +13461,7 @@ h1.blue {
 
 .bayern-footer {
     width: 100%;
-    min-height: 100px;
+    height: 100px;
     margin-top: 60px;
     background-color: #0E0060;
     display: flex;
@@ -13471,6 +13471,24 @@ h1.blue {
     padding-left: 50px;
     padding-right: 50px;
     color: white;
+}
+
+.m-auto{
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:-200px;
+    width:100%;
+}
+
+.full-h{
+    min-height:300px;
+}
+
+.m-auto span{
+    margin:auto;
+
 }
 
     .bayern-footer .footer-left {
@@ -13513,7 +13531,7 @@ body {
 
 .bayern-footer .footer-inner {
     max-width: 1200px;
-    min-height: 100px;
+    height: 100px;
     margin: auto;
     background-color: #0E0060;
     display: flex;
@@ -13525,7 +13543,14 @@ body {
     color: white;
 }
 
+#__next{
+    display: table !important;
+    height:100%
+}
 
+div[data-reactroot]{
+    display: table !important;
+}
 .nav-search {
     border-radius: 5px;
 }
@@ -13536,6 +13561,10 @@ display: flex;
 flex-direction: column;
 } */
 
+.login-loader {
+    display:flex;
+    justify-content:center;
+}
 
 @media(max-width:991px) {
     .section.navigation {
