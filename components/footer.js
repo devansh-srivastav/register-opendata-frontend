@@ -8,9 +8,10 @@ class Footer extends Component {
                         <div className="footer-w">
                             <div className="footer-inner">
                         <div className="footer-left">
-                            <h4>
+                            <h6 className="footer-text">
+
                                 Dies ist ein Pilotprojekt der Digitalschmiede Bayern in Kooperation mit der Digital Product School und dem Bayerischen Staatsministerium fur Digitales.
-               </h4>
+               </h6>
 
                         </div>
                         <div className="footer-right">

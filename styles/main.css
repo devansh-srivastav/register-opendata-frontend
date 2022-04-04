@@ -1813,6 +1813,10 @@ ol {
     list-style: none;
 }
 
+.list-unstyled li a {
+    color: #000 !important;
+}
+
 .list-inline {
     padding-left: 0;
     margin: 0;

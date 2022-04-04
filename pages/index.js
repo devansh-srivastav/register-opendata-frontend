@@ -9,7 +9,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 export default function Home() {
 
-     const apiUrl = "https://registerbackend.opendatabayern.de/api/";
+  const apiUrl = "https://register-opendata-backend-7i7aqmgwqq-ey.a.run.app/api/";
      let router = useRouter();
     //const apiUrl = "https://registerbackend.opendatabayern.de/api/";
     //const apiUrl = "http://localhost:3100/api/";
@@ -179,7 +179,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
             </div>
             <form method="post" className="dataset-form login-form">
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                <label className="control-label" htmlFor="field-login">
                 Name
                 </label>
                 <div className="controls ">
@@ -196,7 +196,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
                 </div>
               </div>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Vorname
                 </label>
                 <div className="controls ">
@@ -224,7 +224,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
               </ReactTooltip>
 
               <div className="form-group control-medium">
-                <label className="control-label " for="field-login">
+                  <label className="control-label " htmlFor="field-login">
                 Arbeitsmail
                 </label>
                 <div className="controls df">
@@ -244,7 +244,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
                 </div>
               </div>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Telefon
                 </label>
                 <div className="controls df">
@@ -266,7 +266,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
               <h3>
 Über Ihre Organisation</h3>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Organisation
                 </label>
                 <div className="controls df">
@@ -284,7 +284,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
  
 {orgss.length>0 && orgss[0].map((data,index)=>{
    return(
-     <option id={data} value={data}/>
+     <option key={data.id} id={data} value={data}/>
   )
  } )}
   
@@ -298,7 +298,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
                 </div>
               </div>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Webseite
                 </label>
                 <div className="controls
@@ -316,7 +316,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
               </div>
 
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Beschreibung
                 </label>
                 <div className="controls  df">
@@ -331,7 +331,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
                 </div>
               </div>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Ihre Position
                 </label>
                 <div className="controls ">
@@ -349,7 +349,7 @@ Um ein Datenbereitsteller-Konto zu erstellen benötigen wir einige Angaben über
               <br/>
               <br/>
               <div className="form-group control-medium">
-                <label className="control-label" for="field-login">
+                  <label className="control-label" htmlFor="field-login">
                 Hinterlassen Sie uns Eine Nachricht
                 </label>
                 <div className="controls ">
