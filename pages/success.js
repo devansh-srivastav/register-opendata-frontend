@@ -23,13 +23,13 @@ export default function Home() {
                 <br/>
                 <br/>
                 <h4>
-                  Sie werden eine Bestätigung per E-Mail erhalten. 
-                  Wir werden uns in 1 - 3 Werktagen bei Ihnen melden.
+                      Sie werden eine Bestätigung per E-Mail erhalten.
+                      Ihre Registrierung befindet sich derzeit in Bearbeitung. Wir werden uns in 1 - 3 Werktagen bei Ihnen melden.
                 </h4>
                 <br/>
                 <br/>
                 <h4>
-                  Haben Sie keine E-Mail erhalten? <a href="mailto:contact@opendatabayern.de">Kontaktieren Sie uns.</a>
+                      Haben Sie keine E-Mail erhalten? <a href="mailto:opendatabayern@stmd.byern.de">Kontaktieren Sie uns.</a>
                 </h4>
           </div>
       </main>

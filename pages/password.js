@@ -89,7 +89,7 @@ let categories=['andere',
     
     let res = axios.post(apiUrl + "createUser",query,configs).
         then(async (res) => {
-
+         
          setLoad(true)
          await RegistrationOnPlatform(query,res.data.result).then(async (result)=>{
           await addToOrg(query,res.data.result).then(async (result)=>{   
