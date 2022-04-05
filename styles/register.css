@@ -130,3 +130,7 @@ opacity: 0.4;
         margin:auto;
     }
  }
+
+ReactTooltip{
+    font-family:manrope;
+}
